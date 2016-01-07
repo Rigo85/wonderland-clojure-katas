@@ -1,0 +1,4 @@
+[Tiger, Goat, Grass]
+[0,X,o]
+[x,0,x]
+[0,x,O]
