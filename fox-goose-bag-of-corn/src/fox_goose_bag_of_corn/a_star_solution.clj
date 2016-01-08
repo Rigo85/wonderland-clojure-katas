@@ -21,15 +21,15 @@
 
 (defn process-open
   [[open closed]] (if (or (.isEmpty open) (goal (.peek open)))
-                  (if (.isEmpty open)
-                    :no-solution (.peek open))
-                  (let [solution (.poll open)
-                        closed* (conj closed solution)]
-                    (recur (process-moves solution open closed*)))))
+                    (if (.isEmpty open)
+                      :no-solution (.peek open))
+                    (let [solution (.poll open)
+                          closed* (conj closed solution)]
+                      (recur (process-moves solution open closed*)))))
 
 (defn search
-  ;Algorithm A*
-  ;Algorithms in a Nutshell by George T. Heiniman, Gary Pollice and Stanley Selkow. 2009. page 194.
+  "Algorithm A*
+   Algorithms in a Nutshell by George T. Heiniman, Gary Pollice and Stanley Selkow. 2009. page 194."
   [initial] (let [open (java.util.PriorityQueue. 100 #(compare (% :fitness) (%2 :fitness)))
                   closed (sorted-set-by #(compare (% :items) (%2 :items)))
                   _ (.add open initial)]

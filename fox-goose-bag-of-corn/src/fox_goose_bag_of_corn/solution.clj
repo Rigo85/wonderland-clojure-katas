@@ -3,19 +3,19 @@
 (def boatman 0)
 
 (defn partial-zip
-  ;([start y]+) where [start < y < size]
+  "([start y]+) where [start < y < size]"
   [start size] (map vector (repeat start) (range (inc start) size)))
 
 (defn indexes-zip
-  ;([x y]+) where [0 < x < size] and [y = x + n | 0 < n < size].
+  "([x y]+) where [0 < x < size] and [y = x + n | 0 < n < size]."
   [size] (reduce #(into % (partial-zip %2 size)) [] (range 1 size)))
 
 (defn filter-same-shore
-  ;keep only the items in the same shore.
+  "keep only the items in the same shore."
   [items zips] (filter (fn [[i j]] (= (items i) (items j))) zips))
 
 (defn process-zips*
-  ;return [conflit-count-in-A conflit-count-in-B]
+  "return [conflit-count-in-A conflit-count-in-B]"
   [affinity items [shoreACount shoreBCount] zip]
   (let [keys (mapv dec zip)
         inc* (if (get-in affinity keys) 1 0)]
@@ -24,7 +24,7 @@
       [shoreACount (+ inc* shoreBCount)])))
 
 (defn fitness
-  ;evaluate the solution (heuristic function).
+  "evaluate the solution (heuristic function)."
   [solution] (let [items (solution :items)
                    zips (->> items count indexes-zip)
                    aff (get-in solution [:problem :affinity])
@@ -40,7 +40,7 @@
                                               (filter-without-current-position position)))
 
 (defn canMove
-  ;We need to verify that when the boatman travel with some fellows, don't leave the shore in conflict.
+  "We need to verify that when the boatman travel with some fellows, don't leave the shore in conflict."
   [solution position] (let [items (solution :items)
                             to-boolean #(get-in solution (into [:problem :affinity] (mapv dec %)))]
                         (->> items
